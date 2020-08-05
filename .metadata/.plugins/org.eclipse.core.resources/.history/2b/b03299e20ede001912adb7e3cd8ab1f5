@@ -1,0 +1,57 @@
+/**
+ * 
+ */
+
+/**
+ * @author linh8
+ *
+ */
+import java.util.Scanner;
+public class Palindrome {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Scanner keyboard = new Scanner(System.in);
+		boolean empty = false;
+		boolean isPalindrome = false;
+		
+		
+		while (empty == false) {
+			System.out.print("Enter a string: ");
+			String input = keyboard.nextLine();
+			if (input.length()==0) {
+				System.out.println ("Empty line read - Goodbye!");
+				empty = true;}
+			else if (input.length()!=0) {
+				for (int i=0; i < input.length(); i++) {
+					if (input.charAt(i) != input.charAt(input.length()-1-i)) {
+						isPalindrome = false;
+							
+					}
+					else {
+						isPalindrome = true;
+									
+				}
+			}
+			if (isPalindrome == true)	{
+				System.out.println ("Palindrome");
+			}
+			else {
+				System.out.println ("not Palindrome");
+			}
+				
+			}
+			
+			
+			
+						
+					
+		}
+		
+	
+	
+
+}
+}

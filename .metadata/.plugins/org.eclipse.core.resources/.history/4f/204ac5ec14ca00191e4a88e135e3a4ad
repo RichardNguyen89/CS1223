@@ -1,0 +1,27 @@
+/**
+ * 
+ */
+
+/**
+ * @author linh8
+ *
+ */
+import java.util.Scanner;
+public class Project01 {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner keyboard = new Scanner(System.in); // Create scanner object
+		System.out.print ("Enter the first number: ");
+		int number1 = keyboard.nextInt();
+		System.out.print ("Enter the second number: ");
+		int number2 = keyboard.nextInt();
+		
+		System.out.println ("Enter the first number: " + number1);
+		System.out.println ("Enter the secondnumber: " + number2);
+	}
+
+}

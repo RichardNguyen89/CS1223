@@ -1,0 +1,49 @@
+/**
+ * 
+ */
+
+/**
+ * @author linh8
+ *
+ */
+import java.util.Scanner;
+public class Palindrome {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Scanner keyboard = new Scanner(System.in);
+		boolean empty = false;
+		
+		
+		while (empty == false) {
+			System.out.print("Enter a string: ");
+			String input = keyboard.nextLine();
+			if (input.length()==0) {
+				System.out.println ("Empty line read - Goodbye!");
+				empty = true;}
+			else if (input.length()!=0) {
+				for (int i=0; i < input.length()/2; i++) {
+					for (int j= input.length()-1; j > input.length()/2; j--) {
+						if (input.charAt(i)!= input.charAt(j)) { // it is checking ever character. 
+							System.out.print("False");
+							
+					}
+									
+				}
+			}
+				
+			}
+			
+			
+			
+						
+					
+		}
+		
+	
+	
+
+}
+}

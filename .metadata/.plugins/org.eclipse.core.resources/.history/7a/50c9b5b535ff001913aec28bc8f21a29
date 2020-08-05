@@ -1,0 +1,271 @@
+/*
+ *   A program that plays and scores a round of the game Poker Dice.  In this game,
+ *   five dice are rolled.  The player is allowed to select a number of those five dice
+ *   to re-roll.  The dice are re-rolled and then scored as if they were a poker hand.
+ *   The following hands MUST be correctly scored in this assignment to receive
+ *   full credit:
+ *      * Highest value x
+ *      * One pair
+ *      * Two pair
+ *      * Three of a kind
+ *      * Straight
+ *      * Full house
+ *      * Four of a kind
+ *      * Five of a kind
+ *
+ * @author ENTER YOUR NAME HERE
+ * @version THE DATE HERE
+ *
+ */
+
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+public class PokerDice {
+
+    /**
+     * Prompts the user with a message passed into method and returns true if
+     * the user enters a 'Y' and false if the user enters an 'N'. The method
+     * should work if the user uses upper or lower case inputs. If the user
+     * enters any other value, the method should display an error message and
+     * continue prompting until a valid value is entered.
+     *
+     * @param inScanner
+     *            Scanner to provide in put from user
+     * @param msg
+     *            message to display to prompt the user to enter a value
+     * @return
+     */
+    public static boolean promptToPlay(Scanner inScanner, String msg) {
+        
+    		System.out.print(msg);
+    		String inputChoice = inScanner.nextLine();
+    		boolean playOrNot = false;
+    		boolean stop = false;
+    		while (!stop) {// loop until condition is reached
+    			if (inputChoice.length() != 1) { // handle strings with length different from 1
+    				System.out.println("ERROR! Only 'Y' and 'N' allowed as input!");
+    				System.out.print(msg);
+    				inputChoice = inScanner.nextLine();
+    			} 
+    			else { // when string length = 1
+    				char choice = inputChoice.charAt(0);
+    				char upperChoice = Character.toUpperCase(choice);
+    				if (!(upperChoice == 'Y' || upperChoice == 'N')) {// check choice
+    					System.out.println("ERROR! Only 'Y' and 'N' allowed as input!");
+        				System.out.print(msg);
+        				inputChoice = inScanner.nextLine();
+    				}
+    				else if (upperChoice == 'Y'){
+    					playOrNot = true;
+    					stop = true;
+    					
+    				}
+    				else {
+    					playOrNot = false;
+    					stop = true;
+    				}
+    			}
+    		}
+    	
+    	
+        return playOrNot;
+    }
+
+    /**
+     * Replaces the zeroes in the array dice with random values between 1 and 6
+     * chosen from the Random generator rnd. Then sorts the array so that the
+     * values are in sorted order. 
+     *
+     * @param rnd
+     *            generator to pull values from
+     * @param dice
+     *            array to fill with values.
+     */
+    public static void rollDice(Random rnd, int[] dice) {
+    	for (int i = 0; i < dice.length; i++) {
+    		if (dice [i] == 0) {
+			dice[i] = rnd.nextInt(6) + 1;
+    		}
+		}
+		Arrays.sort(dice);
+	}
+
+
+    /**
+     * Displays the array dice as the user's current set of die rolls and
+     * prompts them to indicate the indices of dice to be re-rolled, one index
+     * at a time. If the user enters a -1, the loop ends. If the user enters an
+     * invalid index other than -1, the method displays an error message and
+     * continues prompting until a valid index or -1 is entered.
+     *
+     * @param dice
+     *            array to set dice to be rerolled
+     * @param inScanner
+     *            Scanner to provide input from user
+     */
+    public static void promptForReroll(int[] dice, Scanner inScanner) {
+        // display the current dices
+    	System.out.println("Your current roll: "+ Arrays.toString(dice));
+    	
+    	// prompt for reroll
+    	System.out.print("Select a die to re-roll (-1 to keep remaining dice): ");
+    	String rerollCh = inScanner.nextLine(); 
+    	int rerollChoice = Integer.parseInt(rerollCh);
+    	
+    	// check if choice within bound
+    	boolean stop = false;
+    	while (!stop) { // loop until user enters -1
+			if (rerollChoice > dice.length - 1 || rerollChoice < -1) { // error if outside of range
+				System.out.println("Error: Index must be between 0 and 4");
+				System.out.println("Your current roll: " + Arrays.toString(dice));
+			} else if (rerollChoice <= dice.length - 1 && rerollChoice >= 0) {// change the value of dice with the index from user's input
+				dice[rerollChoice] = 0;
+				System.out.println("Your current roll: " + Arrays.toString(dice));
+			} else {
+				System.out.println("Keeping remaining dice...");
+				System.out.println("Rerolling...");
+				stop = true; //stop looping
+
+			}
+    	}
+
+    }
+
+    /**
+     * Returns an array where each position represents the counts of a value in
+     * the array dice. For example, if dice is [1, 2, 3, 3, 5], then this method
+     * would return [1, 1, 2, 0, 1, 0] - where index 0 holds the number of 1s,
+     * index 1 holds the number of 2s, index 2 holds the number of 3s, etc.
+     *
+     * @param dice
+     *            die rolls to count
+     * @return array holding counts of each value in the array dice
+     */
+    public static int[] getCounts(int[] dice) {
+        int [] count = new int[6];
+        for (int i =0; i < dice.length; i++) {//because the value of the dice will always be 1 value more than its index in count
+        	count[dice[i]-1]++;
+        	
+        }
+        return count;
+    }
+
+    /**
+     * Given a SORTED array in increasing order, returns true if the numbers
+     * form an unbroken sequence, false otherwise. For example, [1,2,3,4,5]
+     * would be true, but [1,2,3,4,6] would be false.
+     *
+     * @param dice
+     *            array sorted in increasing order
+     * @return true if values in dice are in an unbroken sequence, false
+     *         otherwise
+     */
+    public static boolean inSequence(int[] dice) {
+    	boolean inSequence = true; //assume always in sequence at first and test for not insequence. only 1 false will return false
+        for (int i =0; i < dice.length-1; i++) {// because the last one doesn't have next so test until dice.length -1 only
+        	if (dice[i]!=dice[i+1]-1) { // check if the previous value equal to the next. 
+        		inSequence = false;        		
+        	}
+        }
+        return inSequence;
+    }
+
+    /**
+     * Returns true if value is somewhere in the array, false otherwise
+     *
+     * @param array
+     *            array to search for value
+     * @param value
+     *            item to look for in the array
+     * @return true if value is in array, otherwise false
+     */
+    public static boolean contains(int[] array, int value) {
+    	boolean contains = false;
+        for (int i =0; i < array.length; i++) {
+        	if (array[i] == value) {
+        		contains = true;
+        	}
+        }
+        return contains;
+    }
+
+    /**
+     * Scores the value of the array of dice as a poker hand. Returns a String
+     * giving the rank of the hand. See the assignment write-up for details on
+     * how the rank string should be formatted.
+     *
+     * @param dice
+     *            die rolls in sorted order
+     * @return String holding the rank of the roll in the array dice
+     */
+    public static String scoreDice(int[] dice) {
+        int [] result = getCounts (dice);
+        Arrays.sort(result);
+        String fResult = " ";
+        if (inSequence(dice)) {
+        	fResult = "Straight";
+        }
+        else {
+        	if (contains(result, 5)) {
+        		fResult = "Five of a kind";
+        	}
+        	else if (contains (result, 4)) {
+        		fResult = "Four of a kind";
+        	}
+        	else if (contains (result, 3)) {
+        		if (contains(result,2)) {
+        			fResult = "Full house";
+        		}
+        		else {
+        			fResult = "Three of a kind";
+        		}
+        	}
+        	else if (contains(result,2)) {
+        		if (result[4]==2) {
+        			fResult = "Two pair";
+        		}
+        		else {
+        			fResult ="One pair";
+        		}
+        	}
+        	else {
+        		fResult = "Highest value " + dice[dice.length -1];
+        	}
+        }
+        return fResult;
+    }
+
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+    	// set up scanner
+		Scanner keyboard = new Scanner(System.in);
+		// set up random
+		Random rnd = new Random();
+		System.out.print("Enter a random seed: ");
+		// ask for seed
+		String s = keyboard.nextLine();
+		int s1 = Integer.parseInt(s);
+		rnd.setSeed(s1);
+		System.out.println ("Welcome to the Poker Dice game!");
+		System.out.println("Roll 5 dice and try to assemble the best poker hand.");
+		
+		// prompt to play
+		promptToPlay (keyboard, "Enter a Y or N: ");		
+		//roll
+		
+		
+		
+		// prompt to reroll
+		
+		// final roll
+		// decide
+		
+
+    }
+
+}

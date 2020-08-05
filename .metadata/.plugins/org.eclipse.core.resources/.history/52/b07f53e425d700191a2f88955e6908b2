@@ -1,0 +1,43 @@
+/**
+ * 
+ */
+
+/**This program should ask the user to enter a String and should loop until the user enters an empty
+String. If the user has entered at least one String, the program should report the longest and shortest
+strings entered by the user
+ * @author linh8
+ *
+ */
+import java.util.Scanner;
+public class SampleExam {
+	public static void main(String[] args) {
+		Scanner in = new Scanner(System.in);
+		String[] inputString = new String [99999];
+		int lng1 = 0;
+		String longest = null;
+		int lng2 = 9999999;
+		String shortest = null;
+				
+		
+		for (int i =0; i < inputString.length; i++) {
+			System.out.print ("Enter a value: ");
+			String input = in.next();
+			
+			/*if (input.length()>lng1) {
+				lng1 = input.length();
+				longest = input;
+			}*/
+			
+			if ((input.length()< lng2) && (!(input.equals(""))) ) {
+				lng2 = input.length();
+				shortest = input;
+			}
+			
+			if (input.equals("")) {
+			//System.out.println(longest);
+			System.out.println("shortest " + shortest);
+			break;
+}
+	}
+}
+}
